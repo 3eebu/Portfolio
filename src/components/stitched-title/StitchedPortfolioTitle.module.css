@@ -1,0 +1,69 @@
+.title {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  aspect-ratio: 1030 / 330;
+  isolation: isolate;
+}
+
+.p, .letters {
+  position: absolute;
+  top: 0;
+  pointer-events: none;
+  animation: artwork-enter .95s both cubic-bezier(.2, .75, .2, 1);
+}
+
+.p { left: 0; width: 23.3009709%; height: 100%; animation-delay: .33s; }
+.letters { left: 23.3009709%; width: 76.6990291%; height: 57.5757576%; animation-delay: .48s; }
+.p img, .letters img { display: block; width: 100%; height: 100%; object-fit: fill; }
+.p img { filter: drop-shadow(-39px 65px 20px rgb(0 0 0 / 25%)); }
+.letters img { filter: drop-shadow(-39px 40px 20px rgb(0 0 0 / 25%)); }
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+  opacity: 0;
+}
+
+.seams path {
+  stroke-width: 2.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  opacity: 1;
+  filter: drop-shadow(0 .75px .35px rgb(36 27 17 / 65%)) drop-shadow(0 -.4px .25px rgb(255 244 215 / 70%));
+}
+
+.thread {
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.threadBed { stroke: #3c3021; stroke-width: 4; opacity: .6; }
+.threadCore { stroke: currentColor; stroke-width: 2.7; }
+.threadFiber { stroke: #fff3d3; stroke-width: .75; stroke-dasharray: 1.2 3.4; opacity: .72; }
+
+.needle { filter: drop-shadow(0 1.3px 1px rgb(33 28 19 / 42%)); }
+
+@keyframes artwork-enter {
+  from { opacity: 0; transform: translateY(15px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 900px) {
+  .p img { filter: drop-shadow(-10px 15px 8px rgb(0 0 0 / 22%)); }
+  .letters img { filter: drop-shadow(-10px 12px 8px rgb(0 0 0 / 22%)); }
+  .threadBed { stroke-width: 3.2; }
+  .threadCore { stroke-width: 2.2; }
+  .threadFiber { stroke-width: .6; }
+  .seams path { stroke-width: 3.2; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .p, .letters { animation: none; }
+  .overlay { display: none; }
+}

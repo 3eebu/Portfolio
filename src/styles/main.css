@@ -50,15 +50,7 @@ a:focus-visible { outline: 2px solid #6e6232; outline-offset: 5px; border-radius
 .canvas-shell { width: 100%; position: relative; }
 .canvas { position: relative; width: 1440px; height: 1720px; margin: 0 auto; transform-origin: top left; }
 
-.hero { position: absolute; z-index: 5; left: 205px; top: 260px; width: 1030px; height: 330px; --p-x: 0px; --p-y: 0px; --letters-x: 0px; --letters-y: 0px; }
-.hero__p, .hero__letters { position: absolute; top: 0; }
-.hero__p { left: 0; width: 240px; height: 330px; animation: art-enter .95s .33s both cubic-bezier(.2,.75,.2,1); }
-.hero__letters { left: 240px; width: 790px; height: 190px; animation: art-enter .95s .48s both cubic-bezier(.2,.75,.2,1); }
-.hero__p img, .hero__letters img { display: block; width: 100%; height: 100%; object-fit: fill; transition: transform .35s ease-out; will-change: transform; }
-.hero__p img { filter: drop-shadow(-39px 65px 20px rgb(0 0 0 / 25%)); transform: translate3d(var(--p-x), var(--p-y), 0); }
-.hero__letters img { filter: drop-shadow(-39px 40px 20px rgb(0 0 0 / 25%)); transform: translate3d(var(--letters-x), var(--letters-y), 0); }
-.stitches { position: absolute; z-index: 2; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
-.needle { filter: drop-shadow(0 1px 1px rgb(0 0 0 / 22%)); }
+.hero { position: absolute; z-index: 5; left: 205px; top: 260px; width: 1030px; height: 330px; }
 
 .hero-tagline { position: absolute; z-index: 4; left: 465px; top: 482px; width: 725px; text-align: center; color: #655a45; animation: fade-enter .85s .88s both ease-out; }
 .hero-tagline p { margin: 0; }
@@ -104,7 +96,6 @@ a:focus-visible { outline: 2px solid #6e6232; outline-offset: 5px; border-radius
 .scroll-indicator__line { display: block; width: 1px; height: 28px; background: currentColor; transform-origin: top; animation: line-breathe 4s 1.5s infinite ease-in-out; }
 
 @keyframes nav-enter { from { opacity: 0; transform: translate(-50%, -12px); } to { opacity: 1; transform: translate(-50%, 0); } }
-@keyframes art-enter { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
 @keyframes fade-enter { from { opacity: 0; transform: translateY(7px); } to { opacity: 1; transform: translateY(0); } }
 @keyframes line-breathe { 0%, 30%, 100% { transform: scaleY(.65); opacity: .5; } 60% { transform: scaleY(1); opacity: .9; } }
 
@@ -117,10 +108,6 @@ a:focus-visible { outline: 2px solid #6e6232; outline-offset: 5px; border-radius
   .canvas-shell { height: auto !important; padding: 120px 18px 64px; }
   .canvas { width: 100%; height: auto; transform: none !important; display: flex; flex-direction: column; align-items: center; }
   .hero { position: relative; left: auto; top: auto; width: min(100%, 640px); height: auto; aspect-ratio: 1030 / 330; flex: none; }
-  .hero__p { left: 0; width: 23.32%; height: 100%; }
-  .hero__letters { left: 23.32%; width: 76.68%; height: 57.58%; }
-  .hero__p img { filter: drop-shadow(-10px 15px 8px rgb(0 0 0 / 22%)); }
-  .hero__letters img { filter: drop-shadow(-10px 12px 8px rgb(0 0 0 / 22%)); }
   .hero-tagline { position: relative; left: auto; top: auto; width: 100%; margin: 20px 0 62px; }
   .hero-tagline__themes { gap: 10px; font-size: 9px; letter-spacing: .16em; }
   .hero-tagline__themes span { width: 17px; }
@@ -156,6 +143,5 @@ a:focus-visible { outline: 2px solid #6e6232; outline-offset: 5px; border-radius
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
-  .stitches { display: none; }
   .profile-card, .portrait, .profile-identity, .about-content, .tool-stack li { opacity: 1 !important; transform: none !important; }
 }
