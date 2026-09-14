@@ -45,7 +45,7 @@ a:focus-visible { outline: 2px solid #6e6232; outline-offset: 5px; border-radius
   top: clamp(20px, 2.153vw, 31px);
   left: 50%;
   width: min(1280px, 88.889vw);
-  height: 76px;
+  height: 68px;
   display: flex;
   align-items: center;
   padding: 0 32px;
@@ -183,7 +183,7 @@ a:focus-visible { outline: 2px solid #6e6232; outline-offset: 5px; border-radius
 
 @media (max-width: 900px) {
   .craft-details { display: none; }
-  .navbar { top: 14px; width: calc(100% - 28px); height: 62px; padding: 0 17px; border-radius: 19px; }
+  .navbar { top: 14px; width: calc(100% - 28px); height: 60px; padding: 0 17px; border-radius: 19px; }
   .navbar--scrolled { top: 9px; height: 58px; }
   .navbar__note { display: none; }
   .navbar__brand { font-size: 14px; }
