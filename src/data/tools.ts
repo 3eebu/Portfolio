@@ -15,6 +15,7 @@ export type PortfolioTool = {
   summary: string
   learned: string
   tags: string[]
+  subtitle?: string
   /** Visible artwork fraction inside the exported image's transparent bounds. */
   visualFill: number
 }
@@ -64,9 +65,10 @@ export const tools: PortfolioTool[] = [
     tags: ['Version control', 'Collaboration', 'Shipping'], visualFill: 1,
   },
   {
-    name: 'Figma', src: figma, rating: 5, outOf: 5,
-    summary: 'Used for UI design, layout building, prototyping, and interface planning.',
+    name: 'Figma', src: figma, rating: 4, outOf: 5,
+    subtitle: 'IDEAS TO INTERFACES',
+    summary: 'I use Figma to design user interfaces, create wireframes, and collaborate on product ideas. It helps me turn concepts into clean, functional, and beautiful designs.',
     learned: 'I’ve learned how to design scalable systems, work with components, prototype interactions, and collaborate effectively with teams.',
-    tags: ['UI Design', 'Wireframes', 'Prototyping'], visualFill: .72,
+    tags: ['UI Design', 'Wireframes', 'Prototyping', 'Layouts'], visualFill: .72,
   },
 ]

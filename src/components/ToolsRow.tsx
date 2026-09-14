@@ -26,7 +26,7 @@ function ToolScrollReveal({ tool, index, closing, onClose }: RevealProps) {
         </div>
         <div className="tool-scroll__heading">
           <h4>{tool.name}</h4>
-          <span>IDEAS INTO PRACTICE</span>
+          <span>{tool.subtitle ?? 'IDEAS INTO PRACTICE'}</span>
         </div>
         <span className="tool-scroll__note" aria-hidden="true">Same tool.<br />Bigger ideas.</span>
         <div className="tool-scroll__columns">
