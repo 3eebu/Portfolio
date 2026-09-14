@@ -13,14 +13,16 @@ import github from './assets/figma/github.png'
 import figma from './assets/figma/figma.png'
 
 const tools = [
-  { name: 'Photoshop', src: photoshop },
-  { name: 'Premiere Pro', src: premiere },
-  { name: 'Lightroom', src: lightroom },
-  { name: 'DaVinci Resolve', src: davinci },
-  { name: 'Procreate', src: procreate },
-  { name: 'Illustrator', src: illustrator },
-  { name: 'GitHub', src: github },
-  { name: 'Figma', src: figma },
+  // Approximate visible artwork fraction inside each source image's transparent bounds.
+  // One target visible size below keeps the whole row optically consistent.
+  { name: 'Photoshop', src: photoshop, visualFill: .74 },
+  { name: 'Premiere Pro', src: premiere, visualFill: .74 },
+  { name: 'Lightroom', src: lightroom, visualFill: .67 },
+  { name: 'DaVinci Resolve', src: davinci, visualFill: .65 },
+  { name: 'Procreate', src: procreate, visualFill: .70 },
+  { name: 'Illustrator', src: illustrator, visualFill: .77 },
+  { name: 'GitHub', src: github, visualFill: 1 },
+  { name: 'Figma', src: figma, visualFill: .72 },
 ]
 
 function Navbar() {
@@ -41,7 +43,26 @@ function Navbar() {
         <a href="#work">Work</a>
         <a href="#contact">Contact</a>
       </div>
+      <span className="navbar__note" aria-hidden="true">Turning ideas<br />into real things.</span>
     </nav>
+  )
+}
+
+function CraftDetails() {
+  return (
+    <div className="craft-details" aria-hidden="true">
+      <svg className="craft-details__thread" viewBox="0 0 1440 1720" fill="none" preserveAspectRatio="none">
+        <path d="M 82 -16 C 90 94 117 183 213 207 C 245 216 263 204 278 189 C 293 173 319 174 325 195" />
+        <path d="M 1438 299 C 1394 302 1410 264 1370 252 C 1330 240 1309 268 1290 283" />
+        <path d="M 1452 1451 C 1406 1497 1361 1512 1306 1549 C 1260 1580 1207 1642 1180 1725" />
+        <path className="craft-details__fine-thread" d="M 59 1240 C 103 1275 67 1310 93 1355 C 111 1386 173 1412 205 1412" />
+        <path className="craft-details__stitch" d="m 493 241 7 8 m -7 0 8 -8 M 1260 338 l 8 8 m -8 0 8 -8 M 1302 322 l 6 6 m -6 0 6 -6" />
+      </svg>
+      <span className="craft-note craft-note--hero">Build<br />Create<br />Experiment<br />Repeat<span className="craft-note__dots">···</span></span>
+      <span className="craft-note craft-note--label">Good<br />ideas<br />take time.</span>
+      <span className="craft-note craft-note--bottom">Better<br />things<br />ahead.</span>
+      <span className="craft-details__paper-scrap" />
+    </div>
   )
 }
 
@@ -85,6 +106,9 @@ function ProfileCard() {
   return (
     <section id="profile" ref={cardRef} className={`profile-card ${visible ? 'profile-card--visible' : ''}`} aria-labelledby="about-heading">
       <img className="profile-card__shape" src={cardShape} alt="" aria-hidden="true" />
+      <span className="profile-card__tape" aria-hidden="true" />
+      <span className="craft-note craft-note--portrait" aria-hidden="true">Same<br />person.<br />Different<br />ideas. <span>↘</span></span>
+      <span className="craft-note craft-note--tools" aria-hidden="true">Just a<br />few tools... <span>↖</span></span>
       <div className="portrait">
         <img className="portrait__circle" src={oliveCircle} alt="" aria-hidden="true" />
         <img className="portrait__person" src={portrait} alt="Portrait of Muhammad Saad" width="398" height="493" />
@@ -107,7 +131,7 @@ function ProfileCard() {
           <h3>TOOLS I WORK WITH</h3>
           <ul>
             {tools.map((tool, index) => (
-              <li key={tool.name} style={{ '--tool-index': index } as CSSProperties}>
+              <li key={tool.name} style={{ '--tool-index': index, '--visual-fill': tool.visualFill } as CSSProperties}>
                 <img src={tool.src} alt={tool.name} loading="lazy" />
               </li>
             ))}
@@ -140,12 +164,40 @@ function useCanvasScale() {
 
 export default function App() {
   const scale = useCanvasScale()
+  const siteRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const site = siteRef.current
+    if (!site) return
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)')
+    let frame = 0
+    let x = 0
+    let y = 0
+    const paint = () => {
+      site.style.setProperty('--grain-x', `${x.toFixed(2)}px`)
+      site.style.setProperty('--grain-y', `${y.toFixed(2)}px`)
+      frame = 0
+    }
+    const onPointerMove = (event: PointerEvent) => {
+      if (reducedMotion.matches || event.pointerType === 'touch') return
+      x = (event.clientX / window.innerWidth - .5) * 6
+      y = (event.clientY / window.innerHeight - .5) * 6
+      if (!frame) frame = window.requestAnimationFrame(paint)
+    }
+    window.addEventListener('pointermove', onPointerMove, { passive: true })
+    return () => {
+      window.removeEventListener('pointermove', onPointerMove)
+      if (frame) window.cancelAnimationFrame(frame)
+    }
+  }, [])
 
   return (
-    <div id="top" className="site">
+    <div id="top" ref={siteRef} className="site">
+      <div className="site__texture" aria-hidden="true" />
       <Navbar />
       <main className="canvas-shell" style={{ height: `${1720 * scale}px` }}>
         <div className="canvas" style={{ transform: `scale(${scale})` }}>
+          <CraftDetails />
           <Hero />
           <HeroTagline />
           <ProfileCard />
