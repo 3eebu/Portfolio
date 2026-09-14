@@ -1,29 +1,9 @@
-import { useEffect, useRef, useState, type CSSProperties } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import StitchedPortfolioTitle from './components/stitched-title/StitchedPortfolioTitle'
+import ToolsRow from './components/ToolsRow'
 import portrait from './assets/figma/portrait.png'
 import cardShape from './assets/figma/card-shape.svg'
 import oliveCircle from './assets/figma/olive-circle.svg'
-import photoshop from './assets/figma/photoshop.png'
-import premiere from './assets/figma/premiere.png'
-import lightroom from './assets/figma/lightroom.png'
-import davinci from './assets/figma/davinci.png'
-import procreate from './assets/figma/procreate.png'
-import illustrator from './assets/figma/illustrator.png'
-import github from './assets/figma/github.png'
-import figma from './assets/figma/figma.png'
-
-const tools = [
-  // Approximate visible artwork fraction inside each source image's transparent bounds.
-  // One target visible size below keeps the whole row optically consistent.
-  { name: 'Photoshop', src: photoshop, visualFill: .74 },
-  { name: 'Premiere Pro', src: premiere, visualFill: .74 },
-  { name: 'Lightroom', src: lightroom, visualFill: .67 },
-  { name: 'DaVinci Resolve', src: davinci, visualFill: .65 },
-  { name: 'Procreate', src: procreate, visualFill: .70 },
-  { name: 'Illustrator', src: illustrator, visualFill: .77 },
-  { name: 'GitHub', src: github, visualFill: 1 },
-  { name: 'Figma', src: figma, visualFill: .72 },
-]
 
 function Navbar() {
   const [scrolled, setScrolled] = useState(false)
@@ -107,8 +87,6 @@ function ProfileCard() {
     <section id="profile" ref={cardRef} className={`profile-card ${visible ? 'profile-card--visible' : ''}`} aria-labelledby="about-heading">
       <img className="profile-card__shape" src={cardShape} alt="" aria-hidden="true" />
       <span className="profile-card__tape" aria-hidden="true" />
-      <span className="craft-note craft-note--portrait" aria-hidden="true">Same<br />person.<br />Different<br />ideas. <span>↘</span></span>
-      <span className="craft-note craft-note--tools" aria-hidden="true">Just a<br />few tools... <span>↖</span></span>
       <div className="portrait">
         <img className="portrait__circle" src={oliveCircle} alt="" aria-hidden="true" />
         <img className="portrait__person" src={portrait} alt="Portrait of Muhammad Saad" width="398" height="493" />
@@ -127,16 +105,7 @@ function ProfileCard() {
           <path d="M 3 10 C 32 4 84 4 138 7 M 17 12 C 54 8 97 8 128 9" stroke="#776b3e" strokeWidth="3" strokeLinecap="round" opacity=".82" />
         </svg>
         <p className="about-content__body">Hi, I’m Muhammad Saad, a creative technologist who enjoys turning ideas into things people can actually use, experience, and remember. I work across web design, development, digital products, branding, automation, and visual media, combining technical problem-solving with a strong creative eye. I enjoy building from scratch, experimenting with new ideas, and turning concepts into real products and businesses.</p>
-        <div className="tool-stack">
-          <h3>TOOLS I WORK WITH</h3>
-          <ul>
-            {tools.map((tool, index) => (
-              <li key={tool.name} style={{ '--tool-index': index, '--visual-fill': tool.visualFill } as CSSProperties}>
-                <img src={tool.src} alt={tool.name} loading="lazy" />
-              </li>
-            ))}
-          </ul>
-        </div>
+        <ToolsRow />
       </div>
     </section>
   )

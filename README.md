@@ -18,4 +18,13 @@ Adjust letter anchors, thread colors, stitch counts, and seconds in `src/compone
 
 Run `npm run test:hero` with Node 22.6+ to check timing, sequence order, eye/thread attachment, hidden reset, reduced motion, offscreen pausing, and cleanup.
 
+## Edit the content and assets
+
+- Change each tool's name, rating, description, learned note, tags, or icon in `src/data/tools.ts`. Ratings render as five stitched pips. The data object drives the interactive scroll in `src/components/ToolsRow.tsx`.
+- Change the About Me paragraph and the name/role beneath the portrait in `src/App.tsx`.
+- Replace original exports in `src/assets/figma/` while keeping the imported filenames, or change the imports when adding new filenames. The stitched title remains the two original `portfolio-p.png` and `portfolio-letters.png` exports; its needle and thread are an overlay, not a redraw.
+- Tune the paper, sewn border, rolled edge, and responsive reveal in `src/styles/main.css`. The grain overlay source is `src/assets/paper-grain.svg`.
+
+Click or keyboard-activate a tool icon to drop and unroll its detail card. Selecting another tool furls the first card before opening the next. Click the selected icon, the close button, or press Escape to close it. On phones the card flows below the two-row icon grid.
+
 The Work and Contact navigation targets are reserved for future sections; the brief intentionally leaves those sections for a later design pass.
