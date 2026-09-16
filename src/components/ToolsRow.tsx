@@ -98,7 +98,13 @@ export default function ToolsRow() {
       <h3>TOOLS I WORK WITH</h3>
       <ul className="tool-stack__icons">
         {tools.map((tool, index) => (
-          <li key={tool.name} style={{ '--tool-index': index, '--visual-fill': tool.visualFill } as CSSProperties}>
+          <li key={tool.name} style={{
+            '--tool-index': index,
+            '--visual-fill': tool.visualFill,
+            '--visual-fill-y': tool.visualFillY,
+            '--visual-aspect': tool.visualAspect,
+            '--optical-y': `${tool.opticalY ?? 0}px`,
+          } as CSSProperties}>
             <button
               type="button"
               aria-label={`Show ${tool.name} details`}
