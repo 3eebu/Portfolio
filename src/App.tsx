@@ -114,28 +114,35 @@ function ProfileCard() {
   )
 }
 
-function ProjectCard({ project, onPreview }: { project: PortfolioProject; onPreview: (project: PortfolioProject) => void }) {
+function ProjectCard({ project, onPreview }: { project: PortfolioProject; onPreview: (project: PortfolioProject, screenshotIndex: number) => void }) {
   return (
     <article className={`project-card project-card--${project.theme}`}>
-      <button
-        className="project-card__preview"
-        type="button"
-        onClick={() => onPreview(project)}
-        aria-label={`Open a larger screenshot of ${project.name}`}
-        aria-haspopup="dialog"
-      >
-        <span className="project-card__browser" aria-hidden="true">
-          <span className="project-card__browser-bar">
+      <div className="project-card__preview">
+        <div className="project-card__browser">
+          <div className="project-card__browser-bar" aria-hidden="true">
             <span className="project-card__browser-dots"><i /><i /><i /></span>
-            <span className="project-card__browser-label">SITE CAPTURE</span>
+            <span className="project-card__browser-label">{project.gallery.length} REAL SITE VIEWS</span>
             <span className="project-card__browser-mark" />
-          </span>
-          <span className="project-card__viewport">
-            <img src={project.previewImage} alt="" loading="lazy" />
-          </span>
-          <span className="project-card__zoom">Enlarge preview</span>
-        </span>
-      </button>
+          </div>
+          <div className="project-gallery" aria-label={`${project.name} screenshot gallery`}>
+            {project.gallery.map((screenshot, index) => (
+              <button
+                key={screenshot.label}
+                className="project-gallery__item"
+                type="button"
+                onClick={() => onPreview(project, index)}
+                aria-label={`Open ${screenshot.label} view of ${project.name}`}
+                aria-haspopup="dialog"
+              >
+                <img src={screenshot.image} alt="" loading="lazy" />
+                <span className="project-gallery__label">{screenshot.label}</span>
+                <span className="project-gallery__number">{String(index + 1).padStart(2, '0')}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+        <p className="project-card__gallery-note">Select any frame to explore it full size</p>
+      </div>
       <div className="project-card__content">
         <div className="project-card__eyebrow">
           <span>{project.number} / {project.kind}</span>
@@ -151,8 +158,9 @@ function ProjectCard({ project, onPreview }: { project: PortfolioProject; onPrev
   )
 }
 
-function ProjectPreviewDialog({ project, onClose }: { project: PortfolioProject; onClose: () => void }) {
+function ProjectPreviewDialog({ project, screenshotIndex, onSelect, onClose }: { project: PortfolioProject; screenshotIndex: number; onSelect: (index: number) => void; onClose: () => void }) {
   const closeButtonRef = useRef<HTMLButtonElement>(null)
+  const screenshot = project.gallery[screenshotIndex]
 
   useEffect(() => {
     const previousFocus = document.activeElement instanceof HTMLElement ? document.activeElement : null
@@ -161,6 +169,8 @@ function ProjectPreviewDialog({ project, onClose }: { project: PortfolioProject;
     closeButtonRef.current?.focus()
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') onClose()
+      if (event.key === 'ArrowLeft') onSelect((screenshotIndex - 1 + project.gallery.length) % project.gallery.length)
+      if (event.key === 'ArrowRight') onSelect((screenshotIndex + 1) % project.gallery.length)
     }
     window.addEventListener('keydown', onKeyDown)
     return () => {
@@ -168,7 +178,7 @@ function ProjectPreviewDialog({ project, onClose }: { project: PortfolioProject;
       window.removeEventListener('keydown', onKeyDown)
       previousFocus?.focus()
     }
-  }, [onClose])
+  }, [onClose, onSelect, project.gallery.length, screenshotIndex])
 
   return createPortal(
     <div
@@ -180,14 +190,26 @@ function ProjectPreviewDialog({ project, onClose }: { project: PortfolioProject;
       <section className="project-preview-modal__panel" role="dialog" aria-modal="true" aria-labelledby="project-preview-title">
         <header className="project-preview-modal__header">
           <div>
-            <p className="section-kicker">PROJECT CAPTURE · {project.number}</p>
+            <p className="section-kicker">VIEW {String(screenshotIndex + 1).padStart(2, '0')} / {String(project.gallery.length).padStart(2, '0')} · {screenshot.label.toUpperCase()}</p>
             <h2 id="project-preview-title">{project.name}</h2>
           </div>
           <button ref={closeButtonRef} className="project-preview-modal__close" type="button" onClick={onClose} aria-label="Close project preview">×</button>
         </header>
-        <div className="project-preview-modal__image">
-          <img src={project.previewImage} alt={project.previewAlt} />
+        <div className="project-preview-modal__viewer">
+          <button className="project-preview-modal__arrow" type="button" onClick={() => onSelect((screenshotIndex - 1 + project.gallery.length) % project.gallery.length)} aria-label="Previous screenshot">‹</button>
+          <div className="project-preview-modal__image">
+            <img src={screenshot.image} alt={screenshot.alt} />
+          </div>
+          <button className="project-preview-modal__arrow" type="button" onClick={() => onSelect((screenshotIndex + 1) % project.gallery.length)} aria-label="Next screenshot">›</button>
         </div>
+        <nav className="project-preview-modal__strip" aria-label={`${project.name} screenshots`}>
+          {project.gallery.map((item, index) => (
+            <button key={item.label} className={`project-preview-modal__thumb ${index === screenshotIndex ? 'is-active' : ''}`} type="button" onClick={() => onSelect(index)} aria-label={`Show ${item.label}`} aria-current={index === screenshotIndex ? 'true' : undefined}>
+              <img src={item.image} alt="" />
+              <span>{item.label}</span>
+            </button>
+          ))}
+        </nav>
         <footer className="project-preview-modal__footer">
           <p>{project.description}</p>
           <ul className="project-card__tags" aria-label={`${project.name} focus areas`}>
@@ -202,6 +224,8 @@ function ProjectPreviewDialog({ project, onClose }: { project: PortfolioProject;
 
 function PortfolioSections() {
   const [activeProject, setActiveProject] = useState<PortfolioProject | null>(null)
+  const [activeScreenshotIndex, setActiveScreenshotIndex] = useState(0)
+  const closePreview = () => setActiveProject(null)
 
   return (
     <div className="portfolio-sections">
@@ -215,7 +239,7 @@ function PortfolioSections() {
             <p className="section-heading__note">Websites and digital products built around real people, clear ideas, and a reason to come back.</p>
           </div>
           <div className="project-grid">
-            {projects.map(project => <ProjectCard key={project.name} project={project} onPreview={setActiveProject} />)}
+            {projects.map(project => <ProjectCard key={project.name} project={project} onPreview={(nextProject, screenshotIndex) => { setActiveProject(nextProject); setActiveScreenshotIndex(screenshotIndex) }} />)}
           </div>
 
           <div className="product-work">
@@ -277,7 +301,7 @@ function PortfolioSections() {
           <a href="#top">Back to top</a>
         </footer>
       </section>
-      {activeProject && <ProjectPreviewDialog project={activeProject} onClose={() => setActiveProject(null)} />}
+      {activeProject && <ProjectPreviewDialog project={activeProject} screenshotIndex={activeScreenshotIndex} onSelect={setActiveScreenshotIndex} onClose={closePreview} />}
     </div>
   )
 }
