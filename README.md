@@ -27,4 +27,4 @@ Run `npm run test:hero` with Node 22.6+ to check timing, sequence order, eye/thr
 
 Click or keyboard-activate a tool icon to drop and unroll its detail card. Selecting another tool furls the first card before opening the next. Click the selected icon, the close button, or press Escape to close it. On phones the card flows below the two-row icon grid.
 
-The Work and Contact navigation targets are reserved for future sections; the brief intentionally leaves those sections for a later design pass.
+The portfolio includes selected live work, the CMMN Shield product project, a short build approach, and a contact section. The Work, Tools, and Contact links in the fixed navigation target those sections directly.

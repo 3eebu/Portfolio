@@ -94,7 +94,7 @@ export default function ToolsRow() {
   }
 
   return (
-    <div className={`tool-stack ${activeIndex !== null ? 'tool-stack--open' : ''}`}>
+    <div id="tools" className={`tool-stack ${activeIndex !== null ? 'tool-stack--open' : ''}`}>
       <h3>TOOLS I WORK WITH</h3>
       <ul className="tool-stack__icons">
         {tools.map((tool, index) => (

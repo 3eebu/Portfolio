@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import StitchedPortfolioTitle from './components/stitched-title/StitchedPortfolioTitle'
 import ToolsRow from './components/ToolsRow'
+import { projects } from './data/projects'
 import portrait from './assets/figma/portrait.png'
 import cardShape from './assets/figma/card-shape.svg'
 import oliveCircle from './assets/figma/olive-circle.svg'
@@ -21,6 +22,7 @@ function Navbar() {
       <div className="navbar__links">
         <a href="#profile">Profile</a>
         <a href="#work">Work</a>
+        <a href="#tools">Tools</a>
         <a href="#contact">Contact</a>
       </div>
       <span className="navbar__note" aria-hidden="true">Turning ideas<br />into real things.</span>
@@ -111,6 +113,113 @@ function ProfileCard() {
   )
 }
 
+function ProjectCard({ project }: { project: (typeof projects)[number] }) {
+  return (
+    <article className={`project-card project-card--${project.theme}`}>
+      <div className="project-card__preview" aria-hidden="true">
+        <span className="project-card__preview-label">{project.category}</span>
+        <p>{project.wordmark}</p>
+        <span className="project-card__preview-note">{project.previewNote}</span>
+      </div>
+      <div className="project-card__content">
+        <div className="project-card__eyebrow">
+          <span>{project.number} / {project.kind}</span>
+          <span className="project-card__status">{project.status}</span>
+        </div>
+        <h3>{project.name}</h3>
+        <p className="project-card__description">{project.description}</p>
+        <ul className="project-card__tags" aria-label={`${project.name} focus areas`}>
+          {project.tags.map(tag => <li key={tag}>{tag}</li>)}
+        </ul>
+        {project.url && (
+          <a className="project-card__link" href={project.url} target="_blank" rel="noreferrer">
+            Visit live site
+          </a>
+        )}
+      </div>
+    </article>
+  )
+}
+
+function PortfolioSections() {
+  return (
+    <div className="portfolio-sections">
+      <section id="work" className="work-section" aria-labelledby="work-heading">
+        <div className="section-inner">
+          <div className="section-heading section-heading--work">
+            <div>
+              <p className="section-kicker">01 / SELECTED WORK</p>
+              <h2 id="work-heading">Made to be <em>used.</em></h2>
+            </div>
+            <p className="section-heading__note">Websites and digital products built around real people, clear ideas, and a reason to come back.</p>
+          </div>
+          <div className="project-grid">
+            {projects.map(project => <ProjectCard key={project.name} project={project} />)}
+          </div>
+
+          <div className="product-work">
+            <div className="product-work__mark" aria-hidden="true"><span>&lt;/&gt;</span></div>
+            <div className="product-work__copy">
+              <p className="section-kicker">PRODUCT ENGINEERING · CMMN</p>
+              <h3>CMMN Shield</h3>
+              <p>A TypeScript security foundation for Discord, focused on link checks, threat signals, and safer moderation workflows.</p>
+              <ul className="project-card__tags" aria-label="CMMN Shield technologies">
+                <li>TypeScript</li><li>Discord.js</li><li>Security</li>
+              </ul>
+            </div>
+            <span className="product-work__note">Built for safer communities.</span>
+          </div>
+        </div>
+      </section>
+
+      <section className="approach-section" aria-labelledby="approach-heading">
+        <div className="section-inner">
+          <div className="section-heading section-heading--approach">
+            <div>
+              <p className="section-kicker">02 / HOW I WORK</p>
+              <h2 id="approach-heading">From first sketch<br />to <em>finished thing.</em></h2>
+            </div>
+            <p className="section-heading__note">A simple process keeps the work thoughtful, useful, and ready for real people.</p>
+          </div>
+          <ol className="approach-list">
+            <li>
+              <span className="approach-list__number">01</span>
+              <h3>Understand</h3>
+              <p>Start with who it is for, what they need, and what a good result should feel like.</p>
+            </li>
+            <li>
+              <span className="approach-list__number">02</span>
+              <h3>Shape</h3>
+              <p>Give the idea a clear structure, a distinct visual language, and an easy path through it.</p>
+            </li>
+            <li>
+              <span className="approach-list__number">03</span>
+              <h3>Build</h3>
+              <p>Turn the design into a responsive, working experience, then refine the details that matter.</p>
+            </li>
+          </ol>
+        </div>
+      </section>
+
+      <section id="contact" className="contact-section" aria-labelledby="contact-heading">
+        <div className="contact-card">
+          <div className="contact-card__stitches" aria-hidden="true" />
+          <p className="section-kicker">03 / CONTACT</p>
+          <h2 id="contact-heading">Have an idea<br />worth <em>making?</em></h2>
+          <p className="contact-card__copy">I’m always interested in thoughtful websites, products, and creative collaborations.</p>
+          <a className="contact-card__link" href="https://github.com/3eebu" target="_blank" rel="noreferrer">Find me on GitHub</a>
+          <span className="contact-card__scribble" aria-hidden="true">Let’s make<br />it real.</span>
+        </div>
+        <footer className="portfolio-footer">
+          <a href="#top">Muhammad Saad</a>
+          <span>Designed with care · Built for the web</span>
+          <a href="#top">Back to top</a>
+        </footer>
+      </section>
+    </div>
+  )
+}
+
 function ScrollIndicator() {
   return (
     <div className="scroll-indicator" aria-hidden="true">
@@ -164,14 +273,17 @@ export default function App() {
     <div id="top" ref={siteRef} className="site">
       <div className="site__texture" aria-hidden="true" />
       <Navbar />
-      <main className="canvas-shell" style={{ height: `${1720 * scale}px` }}>
-        <div className="canvas" style={{ transform: `scale(${scale})` }}>
-          <CraftDetails />
-          <Hero />
-          <HeroTagline />
-          <ProfileCard />
-          <ScrollIndicator />
+      <main className="portfolio-main">
+        <div className="canvas-shell" style={{ height: `${1720 * scale}px` }}>
+          <div className="canvas" style={{ transform: `scale(${scale})` }}>
+            <CraftDetails />
+            <Hero />
+            <HeroTagline />
+            <ProfileCard />
+            <ScrollIndicator />
+          </div>
         </div>
+        <PortfolioSections />
       </main>
     </div>
   )

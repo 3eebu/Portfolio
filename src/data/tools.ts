@@ -6,6 +6,7 @@ import procreate from '../assets/figma/procreate.png'
 import illustrator from '../assets/figma/illustrator.png'
 import github from '../assets/figma/github.png'
 import figma from '../assets/figma/figma.png'
+import vscode from '../assets/figma/vscode-code.svg'
 
 export type PortfolioTool = {
   name: string
@@ -74,5 +75,12 @@ export const tools: PortfolioTool[] = [
     summary: 'I use Figma to design user interfaces, create wireframes, and collaborate on product ideas. It helps me turn concepts into clean, functional, and beautiful designs.',
     learned: 'I’ve learned how to design scalable systems, work with components, prototype interactions, and collaborate effectively with teams.',
     tags: ['UI Design', 'Wireframes', 'Prototyping', 'Layouts'], visualFill: .72, visualFillY: .718, visualAspect: .6664,
+  },
+  {
+    name: 'Visual Studio Code', src: vscode, rating: 3, outOf: 5,
+    subtitle: 'CODE TO EXPERIENCE',
+    summary: 'I use it as my code editor to structure, write, and refine websites from a blank project.',
+    learned: 'Keeping project files, a terminal, and version control close makes it easier to move from an idea to a working site.',
+    tags: ['Web development', 'TypeScript', 'React'], visualFill: 1, visualFillY: 1, visualAspect: 1,
   },
 ]
