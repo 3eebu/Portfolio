@@ -9,11 +9,15 @@ type RevealProps = {
 }
 
 function ToolScrollReveal({ tool, index, closing, onClose }: RevealProps) {
+  const scrollOrigin = tools.slice(0, index).reduce(
+    (position, previous) => position + 52 * previous.visualAspect + 8,
+    26 * tool.visualAspect,
+  )
   return (
     <section
       id="tool-scroll-panel"
       className={`tool-scroll ${closing ? 'tool-scroll--closing' : ''}`}
-      style={{ '--scroll-origin': `${(index + .5) * 82}px`, '--visual-fill': tool.visualFill } as CSSProperties}
+      style={{ '--scroll-origin': `${scrollOrigin}px`, '--visual-fill': tool.visualFill } as CSSProperties}
       aria-label={`${tool.name} details`}
     >
       <span className="tool-scroll__roll" aria-hidden="true" />

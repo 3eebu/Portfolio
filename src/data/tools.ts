@@ -7,6 +7,8 @@ import illustrator from '../assets/figma/illustrator.png'
 import github from '../assets/figma/github.png'
 import figma from '../assets/figma/figma.png'
 import vscode from '../assets/figma/vscode-code.svg'
+import mysql from '../assets/figma/mysql.svg'
+import aws from '../assets/figma/aws.svg'
 
 export type PortfolioTool = {
   name: string
@@ -77,10 +79,24 @@ export const tools: PortfolioTool[] = [
     tags: ['UI Design', 'Wireframes', 'Prototyping', 'Layouts'], visualFill: .72, visualFillY: .718, visualAspect: .6664,
   },
   {
-    name: 'Visual Studio Code', src: vscode, rating: 3, outOf: 5,
+    name: 'Visual Studio Code', src: vscode, rating: 5, outOf: 5,
     subtitle: 'CODE TO EXPERIENCE',
     summary: 'I use it as my code editor to structure, write, and refine websites from a blank project.',
     learned: 'Keeping project files, a terminal, and version control close makes it easier to move from an idea to a working site.',
     tags: ['Web development', 'TypeScript', 'React'], visualFill: 1, visualFillY: 1, visualAspect: 1,
+  },
+  {
+    name: 'MySQL', src: mysql, rating: 5, outOf: 5,
+    subtitle: 'DATA INTO INSIGHT',
+    summary: 'I use MySQL to structure, query, and manage relational data for application projects.',
+    learned: 'I’ve learned how thoughtful schemas and clear queries make application data easier to maintain and use.',
+    tags: ['SQL', 'Relational data', 'Queries'], visualFill: 1, visualFillY: 1, visualAspect: 1,
+  },
+  {
+    name: 'Amazon Web Services', src: aws, rating: 5, outOf: 5,
+    subtitle: 'APPLICATIONS IN THE CLOUD',
+    summary: 'I use AWS cloud services to host applications and connect the pieces needed to make them available online.',
+    learned: 'I’ve learned how cloud infrastructure, deployment, and managed services help turn a finished build into a live product.',
+    tags: ['Cloud', 'Hosting', 'Deployment'], visualFill: 1, visualFillY: 1, visualAspect: 1,
   },
 ]

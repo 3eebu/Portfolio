@@ -123,7 +123,7 @@ a:focus-visible { outline: 2px solid #6e6232; outline-offset: 5px; border-radius
 
 .tool-stack { position: absolute; left: -19px; top: 447px; width: 700px; }
 .tool-stack h3 { margin: 0 0 8px 8px; font-size: 11px; line-height: 18px; font-weight: 700; letter-spacing: .19em; color: #756a52; }
-.tool-stack__icons { --icon-visible-size: 60px; display: flex; gap: 12px; align-items: center; list-style: none; margin: 0; padding: 0; }
+.tool-stack__icons { --icon-visible-size: 52px; display: flex; gap: 8px; align-items: center; list-style: none; margin: 0; padding: 0; }
 .tool-stack__icons > li { position: relative; flex: 0 0 calc(var(--icon-visible-size) * var(--visual-aspect)); width: calc(var(--icon-visible-size) * var(--visual-aspect)); height: 94px; display: flex; align-items: center; justify-content: center; opacity: 0; transform: translateY(8px); transition: opacity .4s ease, transform .4s ease; transition-delay: calc(.36s + var(--tool-index) * 45ms); }
 .profile-card--visible .tool-stack__icons > li { opacity: 1; transform: translateY(0); }
 .tool-stack__icons button { position: relative; z-index: 1; width: 100%; min-width: 0; height: 100%; display: grid; place-items: center; overflow: visible; border: 0; padding: 0; background: none; cursor: pointer; }
