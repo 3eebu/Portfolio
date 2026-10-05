@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from 'react'
+import { createPortal } from 'react-dom'
 import StitchedPortfolioTitle from './components/stitched-title/StitchedPortfolioTitle'
 import ToolsRow from './components/ToolsRow'
-import { projects } from './data/projects'
+import { projects, type PortfolioProject } from './data/projects'
 import portrait from './assets/figma/portrait.png'
 import cardShape from './assets/figma/card-shape.svg'
 import oliveCircle from './assets/figma/olive-circle.svg'
@@ -113,14 +114,28 @@ function ProfileCard() {
   )
 }
 
-function ProjectCard({ project }: { project: (typeof projects)[number] }) {
+function ProjectCard({ project, onPreview }: { project: PortfolioProject; onPreview: (project: PortfolioProject) => void }) {
   return (
     <article className={`project-card project-card--${project.theme}`}>
-      <div className="project-card__preview" aria-hidden="true">
-        <span className="project-card__preview-label">{project.category}</span>
-        <p>{project.wordmark}</p>
-        <span className="project-card__preview-note">{project.previewNote}</span>
-      </div>
+      <button
+        className="project-card__preview"
+        type="button"
+        onClick={() => onPreview(project)}
+        aria-label={`Open a larger screenshot of ${project.name}`}
+        aria-haspopup="dialog"
+      >
+        <span className="project-card__browser" aria-hidden="true">
+          <span className="project-card__browser-bar">
+            <span className="project-card__browser-dots"><i /><i /><i /></span>
+            <span className="project-card__browser-label">SITE CAPTURE</span>
+            <span className="project-card__browser-mark" />
+          </span>
+          <span className="project-card__viewport">
+            <img src={project.previewImage} alt="" loading="lazy" />
+          </span>
+          <span className="project-card__zoom">Enlarge preview</span>
+        </span>
+      </button>
       <div className="project-card__content">
         <div className="project-card__eyebrow">
           <span>{project.number} / {project.kind}</span>
@@ -131,17 +146,63 @@ function ProjectCard({ project }: { project: (typeof projects)[number] }) {
         <ul className="project-card__tags" aria-label={`${project.name} focus areas`}>
           {project.tags.map(tag => <li key={tag}>{tag}</li>)}
         </ul>
-        {project.url && (
-          <a className="project-card__link" href={project.url} target="_blank" rel="noreferrer">
-            Visit live site
-          </a>
-        )}
       </div>
     </article>
   )
 }
 
+function ProjectPreviewDialog({ project, onClose }: { project: PortfolioProject; onClose: () => void }) {
+  const closeButtonRef = useRef<HTMLButtonElement>(null)
+
+  useEffect(() => {
+    const previousFocus = document.activeElement instanceof HTMLElement ? document.activeElement : null
+    const previousOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    closeButtonRef.current?.focus()
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') onClose()
+    }
+    window.addEventListener('keydown', onKeyDown)
+    return () => {
+      document.body.style.overflow = previousOverflow
+      window.removeEventListener('keydown', onKeyDown)
+      previousFocus?.focus()
+    }
+  }, [onClose])
+
+  return createPortal(
+    <div
+      className="project-preview-modal"
+      onMouseDown={event => {
+        if (event.target === event.currentTarget) onClose()
+      }}
+    >
+      <section className="project-preview-modal__panel" role="dialog" aria-modal="true" aria-labelledby="project-preview-title">
+        <header className="project-preview-modal__header">
+          <div>
+            <p className="section-kicker">PROJECT CAPTURE · {project.number}</p>
+            <h2 id="project-preview-title">{project.name}</h2>
+          </div>
+          <button ref={closeButtonRef} className="project-preview-modal__close" type="button" onClick={onClose} aria-label="Close project preview">×</button>
+        </header>
+        <div className="project-preview-modal__image">
+          <img src={project.previewImage} alt={project.previewAlt} />
+        </div>
+        <footer className="project-preview-modal__footer">
+          <p>{project.description}</p>
+          <ul className="project-card__tags" aria-label={`${project.name} focus areas`}>
+            {project.tags.map(tag => <li key={tag}>{tag}</li>)}
+          </ul>
+        </footer>
+      </section>
+    </div>,
+    document.body,
+  )
+}
+
 function PortfolioSections() {
+  const [activeProject, setActiveProject] = useState<PortfolioProject | null>(null)
+
   return (
     <div className="portfolio-sections">
       <section id="work" className="work-section" aria-labelledby="work-heading">
@@ -154,7 +215,7 @@ function PortfolioSections() {
             <p className="section-heading__note">Websites and digital products built around real people, clear ideas, and a reason to come back.</p>
           </div>
           <div className="project-grid">
-            {projects.map(project => <ProjectCard key={project.name} project={project} />)}
+            {projects.map(project => <ProjectCard key={project.name} project={project} onPreview={setActiveProject} />)}
           </div>
 
           <div className="product-work">
@@ -216,6 +277,7 @@ function PortfolioSections() {
           <a href="#top">Back to top</a>
         </footer>
       </section>
+      {activeProject && <ProjectPreviewDialog project={activeProject} onClose={() => setActiveProject(null)} />}
     </div>
   )
 }
